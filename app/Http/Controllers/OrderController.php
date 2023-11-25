@@ -41,7 +41,7 @@ class OrderController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreOrderRequest $request, OrderService $orderService): Response
+    public function store(StoreOrderRequest $request, OrderService $orderService): JsonResponse
     {
         $user = $request->user();
         $address = UserAddress::find($request->address);
@@ -49,7 +49,9 @@ class OrderController extends Controller
 
         $order = $orderService->newOrder($user, $address, $products);
 
-        return response(null, 200);
+        return response()->json(
+            new OrderResource($order)
+        );
     }
 
     /**
